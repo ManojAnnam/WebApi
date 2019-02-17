@@ -15,7 +15,7 @@ namespace CityInfo.API.Controllers
             return new  JsonResult(new List<object>()
             {
                 new { id = 1, Name = "NewYork"},
-                new { id = 2, Name = "NewYork2"}
+                new { id = 2, Name = "NewYork3"}
             });
 
         }
