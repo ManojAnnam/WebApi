@@ -10,14 +10,21 @@ namespace CityInfo.API.Controllers
     public class CitiesController : Controller
     {
         [HttpGet()]
-        public JsonResult GetCities()
+        public IActionResult GetCities()
         {
-            return new  JsonResult(new List<object>()
-            {
-                new { id = 1, Name = "NewYork"},
-                new { id = 2, Name = "NewYork4"}
-            });
+            return Ok(CitiesDataStore.Current.Cities);
+        }
 
+        [HttpGet("{id}")]
+        public IActionResult GetCity(int id)
+        {
+            var cityToReturn = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.ID == id);
+            if(cityToReturn == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(cityToReturn);
         }
     }
 }
