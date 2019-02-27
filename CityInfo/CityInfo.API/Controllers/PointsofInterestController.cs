@@ -1,4 +1,5 @@
 ﻿using CityInfo.API.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -101,6 +102,58 @@ namespace CityInfo.API.Controllers
             //Updation
             pointOfInterestFromStore.Name = pointofInterestforUpdateDto.Name;
             pointOfInterestFromStore.Description = pointofInterestforUpdateDto.Description;
+
+            return NoContent();
+        }
+
+        [HttpPatch("{cityId}/pointsofInterest/{id}")]
+        public IActionResult partialUpdation(int cityId,int id,
+            [FromBody] JsonPatchDocument<PointofInterestforUpdateDto> jsonPatch)
+        {
+            if(jsonPatch == null)
+            {
+                return BadRequest();
+            }
+
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.ID == cityId);
+
+            if(city == null)
+            {
+                return BadRequest();
+            }
+
+            var pointOfInterestFromStore = city.PointsofInterest.FirstOrDefault(p => p.ID == id);
+
+            if(pointOfInterestFromStore == null)
+            {
+                return BadRequest();
+            }
+
+            var pointOfInterestToPatch = new PointofInterestforUpdateDto
+            {
+                Description = pointOfInterestFromStore.Description,
+                Name = pointOfInterestFromStore.Name
+            };
+
+            jsonPatch.ApplyTo(pointOfInterestToPatch, ModelState);
+
+            //Checking the patchDoc
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            //Checking the model
+            TryValidateModel(pointOfInterestToPatch);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
+
+            pointOfInterestFromStore.Name = pointOfInterestToPatch.Name;
+            pointOfInterestFromStore.Description = pointOfInterestToPatch.Description;
 
             return NoContent();
         }
