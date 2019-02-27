@@ -14,41 +14,41 @@ namespace CityInfo.API.Controllers
         public IActionResult GetPointsofInterest(int id)
         {
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.ID == id);
-            if( city == null)
+            if (city == null)
             {
                 return NotFound();
             }
             return Ok(city.PointsofInterest);
         }
-        [HttpGet("{id}/pointsofInterest/{pid}",Name = "GetPointofInterest")]
-        public IActionResult GetPointofInterestofCity(int id,int pid)
+        [HttpGet("{id}/pointsofInterest/{pid}", Name = "GetPointofInterest")]
+        public IActionResult GetPointofInterestofCity(int id, int pid)
         {
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.ID == id);
-            if( city == null)
+            if (city == null)
             {
                 return NotFound();
             }
             var pointOfInterest = city.PointsofInterest.FirstOrDefault(f => f.ID == pid);
-            if( pointOfInterest == null)
+            if (pointOfInterest == null)
             {
                 return NotFound();
             }
             return Ok(pointOfInterest);
         }
         [HttpPost("{cityId}/pointsofInterest")]
-        public IActionResult CreatePointofInterest (int cityId,[FromBody]PointofInterestForCreationDto pointofInterestForCreationDto)
+        public IActionResult CreatePointofInterest(int cityId, [FromBody]PointofInterestForCreationDto pointofInterestForCreationDto)
         {
             if (pointofInterestForCreationDto == null)
             {
                 return BadRequest();
             }
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if(pointofInterestForCreationDto.Name == pointofInterestForCreationDto.Description)
+            if (pointofInterestForCreationDto.Name == pointofInterestForCreationDto.Description)
             {
                 ModelState.AddModelError("Description", "Name and Description should not be the same dude");
                 return BadRequest(ModelState);
@@ -69,7 +69,40 @@ namespace CityInfo.API.Controllers
                 Description = pointofInterestForCreationDto.Description
             };
             city.PointsofInterest.Add(finalPointofInterest);
-            return CreatedAtRoute("GetPointofInterest", new { id = cityId , pid = finalPointofInterest.ID}, finalPointofInterest);
+            return CreatedAtRoute("GetPointofInterest", new { id = cityId, pid = finalPointofInterest.ID }, finalPointofInterest);
+        }
+
+        [HttpPut("{cityid}/pointsofInterest/{id}")]
+        public IActionResult UpdatePointofInterest(int cityId,int id,
+            [FromBody]PointofInterestforUpdateDto pointofInterestforUpdateDto)
+        {
+            if(pointofInterestforUpdateDto == null)
+            {
+                return BadRequest();
+            }
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.ID == cityId);
+            if(city == null)
+            {
+                return BadRequest();
+            }
+
+            var pointOfInterestFromStore = city.PointsofInterest.FirstOrDefault(p => p.ID == id);
+
+            if(pointOfInterestFromStore == null)
+            {
+                return BadRequest();
+            }
+
+            //Updation
+            pointOfInterestFromStore.Name = pointofInterestforUpdateDto.Name;
+            pointOfInterestFromStore.Description = pointofInterestforUpdateDto.Description;
+
+            return NoContent();
         }
     }
 }
