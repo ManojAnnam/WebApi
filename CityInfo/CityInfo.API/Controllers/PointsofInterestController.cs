@@ -1,6 +1,7 @@
 ﻿using CityInfo.API.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,18 @@ namespace CityInfo.API.Controllers
     [Route("api/cities")]
     public class PointsofInterestController : Controller
     {
+        private ILogger<PointsofInterestController> _logger;
+        public PointsofInterestController(ILogger<PointsofInterestController> logger)
+        {
+            _logger = logger;
+        }
         [HttpGet("{id}/pointsofInterest")]
         public IActionResult GetPointsofInterest(int id)
         {
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.ID == id);
             if (city == null)
             {
+              
                 return NotFound();
             }
             return Ok(city.PointsofInterest);
@@ -27,6 +34,7 @@ namespace CityInfo.API.Controllers
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.ID == id);
             if (city == null)
             {
+                _logger.LogInformation($"The city with id {id} is not found");
                 return NotFound();
             }
             var pointOfInterest = city.PointsofInterest.FirstOrDefault(f => f.ID == pid);
@@ -35,7 +43,7 @@ namespace CityInfo.API.Controllers
                 return NotFound();
             }
             return Ok(pointOfInterest);
-        }
+         }
         [HttpPost("{cityId}/pointsofInterest")]
         public IActionResult CreatePointofInterest(int cityId, [FromBody]PointofInterestForCreationDto pointofInterestForCreationDto)
         {
