@@ -31,6 +31,10 @@ namespace CityInfo.API.Controllers
         [HttpGet("{id}/pointsofInterest/{pid}", Name = "GetPointofInterest")]
         public IActionResult GetPointofInterestofCity(int id, int pid)
         {
+            try
+            {
+                throw new Exception("Wantedly");
+           
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.ID == id);
             if (city == null)
             {
@@ -43,6 +47,12 @@ namespace CityInfo.API.Controllers
                 return NotFound();
             }
             return Ok(pointOfInterest);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical("I have thrown Exception", ex);
+                return StatusCode(500, "A problem occured while Getting Point of Interest");
+            }
          }
         [HttpPost("{cityId}/pointsofInterest")]
         public IActionResult CreatePointofInterest(int cityId, [FromBody]PointofInterestForCreationDto pointofInterestForCreationDto)
