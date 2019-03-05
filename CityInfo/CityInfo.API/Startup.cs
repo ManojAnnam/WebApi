@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using NLog.Extensions.Logging;
+using NLog.Web;
 
 namespace CityInfo.API
 {
@@ -33,6 +35,12 @@ namespace CityInfo.API
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,ILoggerFactory loggerFactory)
         {
             //loggerFactory.AddDebug();   //In >net Core 2.0 it is by default so no need
+            //add NLog to ASP.NET Core
+            //https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-2 followed this
+            loggerFactory.AddNLog();
+
+            //add NLog.Web
+            app.AddNLogWeb();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
