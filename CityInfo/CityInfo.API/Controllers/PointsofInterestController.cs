@@ -124,7 +124,7 @@ namespace CityInfo.API.Controllers
         }
 
         [HttpPatch("{cityId}/pointsofInterest/{id}")]
-        public IActionResult partialUpdation(int cityId, int id,
+        public IActionResult PartialUpdation(int cityId, int id,
             [FromBody] JsonPatchDocument<PointofInterestforUpdateDto> jsonPatch)
         {
             if (jsonPatch == null)
@@ -192,7 +192,7 @@ namespace CityInfo.API.Controllers
             }
 
             city.PointsofInterest.Remove(pointOfInterestFromStore);
-            _mailingService.send(pointOfInterestFromStore.Name, "is Deleted");
+            _mailingService.Send(pointOfInterestFromStore.Name, "is Deleted");
 
             return NoContent();
         }

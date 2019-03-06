@@ -7,6 +7,6 @@ namespace CityInfo.API.Services
 {
     public interface IMailingService
     {
-        void send(string subject, string message);
+        void Send(string subject, string message);
     }
 }
