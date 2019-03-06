@@ -4,8 +4,8 @@ namespace CityInfo.API.Services
 {
     public class MailingService : IMailingService
     {
-        private string _mailTo = "annam.manoj1996@gmail.com";
-        private string _mailFrom = "svads99@gmail.com";
+        private string _mailTo = Startup.Configuration["mailSettings:ToMail"];
+        private string _mailFrom = Startup.Configuration["mailSettings:FromMail"];
 
         public void send(string subject, string message)
         {
