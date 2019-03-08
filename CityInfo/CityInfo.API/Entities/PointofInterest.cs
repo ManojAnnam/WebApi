@@ -10,11 +10,19 @@ namespace CityInfo.API.Entities
     public class PointofInterest
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
+        [MaxLength(250)]
+       
+        public string Description { get; set; }
+
+        public string Checkeer { get; set; }
+        public City City { get; set; }
+        [ForeignKey("CityID")]
+        public int CityID { get; set; }
     }
 }
