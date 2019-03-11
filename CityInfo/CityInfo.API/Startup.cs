@@ -44,7 +44,7 @@ namespace CityInfo.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,ILoggerFactory loggerFactory,CityInfoContext cityInfoContext)
         {
             //loggerFactory.AddDebug();   //In >net Core 2.0 it is by default so no need
             //add NLog to ASP.NET Core
@@ -57,10 +57,10 @@ namespace CityInfo.API
             {
                 app.UseDeveloperExceptionPage();
             }
-          
+            //cityInfoContext.EnsureSeedDateForContext();
             app.UseMvc();
             app.UseStatusCodePages();
-
+            cityInfoContext.EnsureSeedDateForContext();
             //app.Run(async (context) =>
             //{
             //    throw new Exception("EXAMPLE EXCEPTION");

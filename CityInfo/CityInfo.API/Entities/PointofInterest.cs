@@ -20,7 +20,7 @@ namespace CityInfo.API.Entities
        
         public string Description { get; set; }
 
-        public string Checkeer { get; set; }
+     
         public City City { get; set; }
         [ForeignKey("CityID")]
         public int CityID { get; set; }
