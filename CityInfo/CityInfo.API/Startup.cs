@@ -41,6 +41,7 @@ namespace CityInfo.API
             services.AddTransient<IMailingService,MailingService>();
           //  string connectionString = @"Server=(LocalDb)\MSSQLLocalDB;DataBase = CityInfoDB;Trusted_Connection =True;"; 
             services.AddDbContext<CityInfoContext>(o => o.UseSqlServer(Startup.Configuration["connectionStrings:CityInfoDBConnectionString"]));
+            services.AddScoped<ICityInfoRepository, CityInfoRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
