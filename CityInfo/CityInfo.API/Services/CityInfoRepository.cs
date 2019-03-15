@@ -37,5 +37,10 @@ namespace CityInfo.API.Services
         {
             return _cityInfoContext.PointsofInterests.Where(p => p.CityID == cityId).ToList();
         }
+
+        public bool IfCityExists(int cityId)
+        {
+            return _cityInfoContext.Cities.Any(c => c.ID == cityId);
+        }
     }
 }
