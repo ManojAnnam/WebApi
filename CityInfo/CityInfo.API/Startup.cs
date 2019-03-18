@@ -62,6 +62,18 @@ namespace CityInfo.API
             app.UseMvc();
             app.UseStatusCodePages();
             cityInfoContext.EnsureSeedDateForContext();
+
+
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Entities.City, Models.CityWithoutPointsofInterestsDto>();
+                cfg.CreateMap<Entities.City, Models.CityDto>();
+                cfg.CreateMap<Entities.PointofInterest, Models.PointofInterestDto>();
+                cfg.CreateMap<Models.PointofInterestForCreationDto, Entities.PointofInterest>();
+                cfg.CreateMap<Models.PointofInterestforUpdateDto, Entities.PointofInterest>();
+                cfg.CreateMap<Entities.PointofInterest, Models.PointofInterestforUpdateDto>();
+            });
+
             //app.Run(async (context) =>
             //{
             //    throw new Exception("EXAMPLE EXCEPTION");
